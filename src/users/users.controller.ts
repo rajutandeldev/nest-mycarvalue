@@ -1,10 +1,15 @@
 import {
   Body,
   Controller,
+  Delete,
+  Get,
   HttpStatus,
   InternalServerErrorException,
   Logger,
+  Param,
+  Patch,
   Post,
+  Query,
   Res,
 } from "@nestjs/common";
 import { UserValidationDto } from "./dto/UserValidation.dtos";
@@ -31,7 +36,30 @@ export class UsersController {
       .status(HttpStatus.CREATED)
       .send({
         status: HttpStatus.CREATED,
-        data: `User account created successfully`,
+        data:response,
+        message: `User account created successfully`,
       });
+  } 
+
+  @Get(':id')
+  findUser(@Param('id') id:number){
+     return this.userService.findOne(id)
   }
+  
+  @Get()
+  findAllUser(@Query('email') email:string){
+      console.log('emailemail',email)
+      return this.userService.find(email)
+  }
+
+  @Patch(':id')
+  updateUser(@Param('id') id:number, @Body() body){
+    return this.userService.update(id,body)
+  }
+
+  @Delete(':id')
+  removeUser(@Param('id') id:number){
+      return this.userService.remove(id)
+  }
+
 }
