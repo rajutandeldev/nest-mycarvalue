@@ -11,13 +11,19 @@ import {
   Post,
   Query,
   Res,
+  UseInterceptors,
 } from "@nestjs/common";
 import { UserValidationDto } from "./dto/UserValidation.dtos";
 import { UsersService } from "./users.service";
 import { Response } from "express";
 import { CustomExceptions } from "src/customExceptions/customExceptions";
+import { Serialize, SerializeInterceptor } from "src/interceptors/serialize.interceptor";
+import { UserDto } from "./dto/UserDtos";
 
 @Controller("auth")
+// this will apply for all the path
+@Serialize(UserDto)
+
 export class UsersController {
   constructor(private userService: UsersService) {}
   @Post("signup")
@@ -40,7 +46,10 @@ export class UsersController {
         message: `User account created successfully`,
       });
   } 
-
+  // @UseInterceptors(new SerializeInterceptor(UserDto))
+  //Post refactor
+  // we can add interceptor particularly to endpoint or in root
+  // @Serialize(UserDto)
   @Get(':id')
   findUser(@Param('id') id:number){
      return this.userService.findOne(id)
