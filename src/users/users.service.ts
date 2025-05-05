@@ -19,7 +19,10 @@ export class UsersService {
   }
 
   async findOne(id:number){
-    logger.log(`id | ${id}`)
+    logger.log(`id ------>| ${id}`)
+    if(!id){
+      return null
+    }
     const findRecord = await this.repo.findOne({where:{id}})
     logger.log(`findRecord | ${JSON.stringify(findRecord)}`)
     return findRecord
